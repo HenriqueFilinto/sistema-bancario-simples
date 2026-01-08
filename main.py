@@ -1,5 +1,6 @@
 import tkinter as tk
 import time
+from home_page import pagina_sistema
 from db import criar_conta, checar_conta_existente, puxar_dados
 
 
@@ -12,25 +13,27 @@ pagina_login = tk.Frame(root)
 pagina_login.pack()
 
 
-usuario_text = tk.Label(pagina_login, text="Login:")
-usuario_text.pack()
+text_cpf = tk.Label(pagina_login, text="CPF:")
+text_cpf.pack()
 
-entrada_usuario = tk.Entry(pagina_login,)
-entrada_usuario.pack()
+entrada_cpf = tk.Entry(pagina_login,)
+entrada_cpf.pack()
 
-senha_text = tk.Label(pagina_login, text="CPF:")
+senha_text = tk.Label(pagina_login, text="Senha:")
 senha_text.pack()
 
 entrada_senha = tk.Entry(pagina_login)
 entrada_senha.pack()
 
 def login():
-    titular = entrada_usuario.get().strip() # Sempre use strip
-    cpf = entrada_senha.get().strip()
+    senha = entrada_senha.get().strip() # Sempre use strip
+    cpf = entrada_cpf.get().strip()
 
-    if puxar_dados(titular,cpf):
+    if puxar_dados(cpf,senha):
         pagina_login.pack_forget()
-        pagina_sistema.pack()
+        pagina_sistema()
+    else:
+        print("Nao")
 
 
 def registro():
@@ -50,8 +53,14 @@ def registro():
     cpf_text = tk.Label(pagina_registro, text="CPF:")
     cpf_text.pack()
 
-    cpf_text = tk.Entry(pagina_registro)
-    cpf_text.pack()
+    entrada_cpf = tk.Entry(pagina_registro)
+    entrada_cpf.pack()
+
+    senha_text = tk.Label(pagina_registro, text="Crie Uma Senha")
+    senha_text.pack()
+
+    entrada_senha = tk.Entry(pagina_registro)
+    entrada_senha.pack()
 
     mensagem = tk.Label(pagina_registro)
     mensagem.pack()
@@ -59,7 +68,8 @@ def registro():
     def checar():
 
         titular = entrada_titular.get().strip()
-        cpf = cpf_text.get().strip()
+        cpf = entrada_cpf.get().strip()
+        senha = entrada_senha.get().strip()
 
         if not titular or not cpf:
             print("Invalido")
@@ -73,7 +83,7 @@ def registro():
             print("Ja existe CPF")
             mensagem['text'] = "Conta Já Existente!"
         else:
-            criar_conta(titular,cpf)
+            criar_conta(titular,cpf,senha)
             print("Conta Criada")
             mensagem['text'] = "Conta Criada."
             time.sleep(1)
@@ -97,10 +107,7 @@ mensagem_login.pack()
 
 
 
-pagina_sistema = tk.Frame()
 
-tk.Label(pagina_sistema, text="Bem Vindo!").pack()
-tk.Label(pagina_sistema, text=f"0")
 
 
 
